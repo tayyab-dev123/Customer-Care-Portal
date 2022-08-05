@@ -1,0 +1,29 @@
+﻿@page
+@model CustomerCarePortal.Pages.Tickets.CreateModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<form asp-page-handler="AddTicket">
+    <div class=" mb-3">
+        <div class="h2 text-primary text-uppercase">Welcome to Ticket Creation Form</div>
+        <span class="h4 text-info">Please enter details of the Ticket</span>
+    </div>
+  <div class="mb-3">
+    <label for="CustomerEmail" class="form-label">Email address</label>
+    <input type="email" class="form-control" id="CustomerEmail" asp-for=NewTicket.Email>
+  </div>
+  <div class="mb-3">
+      <label for="InputDescription" class="form-label">Enter Description</label>
+      <input type="text" class="form-control" id="InputDescription" asp-for=NewTicket.Description placeholder="Enter the details of the ticket"/>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<p>
+    <a class="btn btn-primary mt-3"  asp-page="/Tickets/Index">View all Tickets</a>
+</p>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

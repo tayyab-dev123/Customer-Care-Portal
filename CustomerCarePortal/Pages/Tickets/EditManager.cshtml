@@ -1,0 +1,105 @@
+﻿@page
+@model CustomerCarePortal.Pages.Tickets.EditManagerModel
+@{
+}
+
+<h1>Edit</h1>
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-6 row" style="margin-right:2px;">
+        <div class="col-md-12">
+            <form method="post" asp-page-handler="ManagerHandler">
+                <div class="card border-light mb-3" style="max-width: 100%;">
+                    <div class="card-header">Ticket Details</div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bolder">@Model.Ticket.Email</h5>
+                        <p class="card-text"><b class="fw-bold">Description:</b> @Model.Ticket.Description</p>
+                        <p class="card-text"><b class="fw-bold">Assigned Team:</b> @Model.Ticket.TeamAssigned.Name</p>
+                        <p class="card-text">
+                            <!--If Agent is assigned or not-->
+                            <b class="fw-bold">Assigned Agent:</b>
+                            @if (@Model.Ticket.AgentAssigned is not null)
+                            {
+                                <text>@Model.Ticket.AgentAssigned.Name</text>
+                            }
+                            else
+                            {
+                                <text> Not Assinged</text>
+                            }
+                        </p>
+                        <p class="card-text">
+                            <!--If workflow is attached or not-->
+                            <b class="fw-bold">Workflow Attached:</b>
+                            @if (@Model.Ticket.Workflow is not null)
+                            {
+                                <text>@Model.Ticket.Workflow.Name</text>
+                                <p class="card-text"><b class="fw-bold">Crrent State:</b> @Model.Ticket.CurrentState.Name</p>
+                            }
+                            else
+                            {
+                                <text>None</text>
+                            }
+                        </p>
+                        <p class="card-text">
+                            <input type="hidden" asp-for="Ticket.Id" />
+                            <input type="hidden" asp-for="Ticket.TrackingId" />
+                            <input type="hidden" asp-for="Ticket.Description" />
+                            <input type="hidden" asp-for="Ticket.Email" />
+                            <input type="hidden" asp-for="Ticket.TeamAssigned.Id" />
+                            <input type="hidden" asp-for="Ticket.CurrentStateId" />
+                            
+                            <!-- Team Assigned-->
+                            <div class="form-group">
+                                <label class="control-label">Assign Agent</label>
+                                <select asp-for="Ticket.AgentAssigned.Id" class="form-select w-50" asp-items="ViewBag.Agents"></select>
+                                <span asp-validation-for="Ticket.AgentAssigned.Id" class="text-danger"></span>
+                            </div>
+                            <!-- Workflow Assignment Section-->
+                            <!--Worfklow could be attached one time only-->
+                            @if (@Model.Ticket.Workflow is null)
+                            {
+                                <div class="form-group">
+                                    <label class="control-label">Attach Workflow</label>
+                                    <select asp-for="Ticket.WorkflowId" class="form-select w-50" asp-items="ViewBag.Workflows"></select>
+                                    <span asp-validation-for="Ticket.WorkflowId" class="text-danger"></span>
+                                </div>
+                            }else{
+                                <input type="hidden" asp-for="Ticket.WorkflowId" />
+                            }
+                            <div class="form-group mt-3">
+                                <input type="submit" value="Save" class="btn btn-success" />
+                                <a class="btn btn-primary" asp-page="./Index">Back to List</a>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Comment History-->
+    <div class="col-md-6 row">
+        <div class="col-12 ">
+            <h4>Edit History</h4>
+            <div class="card" style="width: 100%;overflow:scroll;">
+                <ul class="list-group list-group-flush">
+                    @if (@Model.Comments is not null)
+                    {
+                        @foreach (var comment in @Model.Comments)
+                        {
+                            <li class="list-group-item">@comment.Description</li>
+                        }
+                    }
+                </ul>
+            </div>
+            <form asp-page-handler="AddComment">
+                <input type="hidden" asp-for="Ticket.Id" />
+                <input type="hidden" asp-for="Ticket.History.Id" />
+                <label class="control-label">Enter Comment</label>
+                <input asp-for="comment.Description" class="form-control" />
+                <input type="submit" value="Add Comment" class="btn btn-success mt-1" />
+            </form>
+        </div>
+    </div>
+</div>

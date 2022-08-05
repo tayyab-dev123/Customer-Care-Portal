@@ -1,0 +1,72 @@
+﻿@page
+@model CustomerCarePortal.Pages.Tickets.EditAdminModel
+@{
+}
+<h1>Edit</h1>
+
+<h4>Ticket</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-6 row" style="margin-right:2px;">
+        <div class="col-md-12">
+            <form method="post" asp-page-handler="AdminHandler">
+                <div class="card border-light mb-3" style="max-width: 100%;">
+                    <div class="card-header">Ticket Details</div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bolder">@Model.Ticket.Email</h5>
+                        <p class="card-text"><b class="fw-bold">Description:</b> @Model.Ticket.Description</p>
+                        <p class="card-text">
+                            <input type="hidden" asp-for="Ticket.Id" />
+                            <input type="hidden" asp-for="Ticket.TrackingId" />
+                            <input type="hidden" asp-for="Ticket.Description" />
+                            <input type="hidden" asp-for="Ticket.Email" />
+                            <!-- Team Assigned-->
+                            @if (@Model.Ticket.TeamAssigned is null)
+                            {
+                                <div class="form-group">
+                                    <label class="control-label">Assign Team</label>
+                                    <select asp-for="Ticket.TeamAssigned.Id" class="form-select w-50" asp-items="ViewBag.Teams"></select>
+                                    <span asp-validation-for="Ticket.TeamAssigned.Id" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <input type="submit" value="Save" class="btn btn-success" />
+                                    <a class="btn btn-primary" asp-page="./Index">Back to List</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="my-3"><b class="fw-bold">AssignedTeam:</b> @Model.Ticket.TeamAssigned.Name</div>
+                                <a class="btn btn-primary" asp-page="./Index">Back to List</a>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Comment History-->
+    <div class="col-md-6 row">
+        <div class="col-12 ">
+            <h4>Edit History</h4>
+            <div class="card" style="width: 100%;overflow:scroll;height:300px;">
+                <ul class="list-group list-group-flush">
+                    @if (@Model.Comments is not null)
+                    {
+                        @foreach (var comment in @Model.Comments)
+                        {
+                            <li class="list-group-item">@comment.Description</li>
+                        }
+                    }
+                </ul>
+            </div>
+            <form asp-page-handler="AddComment">
+                <input type="hidden" asp-for="Ticket.Id" />
+                <input type="hidden" asp-for="Ticket.History.Id" />
+                <label class="control-label">Enter Comment</label>
+                <input asp-for="comment.Description" class="form-control" />
+                <input type="submit" value="Add Comment" class="btn btn-success mt-1" />
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@page
+@model CustomerCarePortal.Pages.Teams.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Team</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Team.Id" />
+            <input type="hidden" asp-for="managerId" />
+            <div class="form-group">
+                <label asp-for="Team.Name" class="control-label"></label>
+                <input asp-for="Team.Name" class="form-control" />
+                <span asp-validation-for="Team.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Choose Department</label>
+                <select asp-for="Team.DepartmentId" class="form-control" asp-items="ViewBag.Departments"></select>
+                <span asp-validation-for="Team.DepartmentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Choose Manager</label>
+                <select asp-for="Team.TeamManagerId" class="form-control" asp-items="ViewBag.TeamManagers"></select>
+                <span asp-validation-for="Team.TeamManagerId" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Save" class="btn btn-success" />
+                <a class="btn btn-primary" asp-page="./Index">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

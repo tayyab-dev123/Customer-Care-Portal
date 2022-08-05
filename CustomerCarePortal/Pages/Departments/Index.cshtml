@@ -1,0 +1,48 @@
+﻿@page
+@model CustomerCarePortal.Pages.Departments.IndexModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Add New Department</h1>
+
+<p>
+    <a class="btn btn-success" asp-page="Create">Create New</a>
+</p>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Department[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Department[0].DepartmentManager)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Department)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @if(@item.DepartmentManager is not null){
+                        @Html.DisplayFor(modelItem => item.DepartmentManager.Name)}
+                    else{
+                        @Html.DisplayName("Not Assigned")
+                    }
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,164 @@
+﻿@page
+@model CustomerCarePortal.Pages.Workflows.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Workflow</h4>
+<hr />
+<div class="row">
+    <div class="col-md-5">
+        <form class="border p-3 border-dark" method="post" asp-page-handler="UpdateWorkflow">
+            <h4>Change Details</h4>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Workflow.Id" />
+            <div class="form-group">
+                <label asp-for="Workflow.Name" class="control-label"></label>
+                <input asp-for="Workflow.Name" class="form-control" />
+                <span asp-validation-for="Workflow.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Initial State</label>
+                <select asp-for="Workflow.IntialStateId" class="form-control">
+                    @if (@Model.Workflow.States is null || @Model.Workflow.States.Count == 0)
+                    {
+                        <option disabled readonly>No States Added yet</option>
+                    }
+                    else
+                    {
+                        @foreach (var item in @Model.Workflow.States)
+                        {
+                            @if (@Model.Workflow.IntialStateId == item.Id)
+                            {
+                                <option value="@item.Id" selected>@item.Name</option>
+                            }
+
+                            else
+
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Save" class="btn btn-success" />
+                <a asp-page="./Index" class="btn btn-primary">Back to List</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-2"></div>
+    <!-- Here goes the State form-->
+
+    <div class="col-md-4">
+        <form class="border p-3 border-dark mt-3" method="post" asp-page-handler="AddState">
+            <!-- Adding the State info here -->
+            <h4>Add New State</h4>
+            <div class="form-group">
+                <input type="hidden" asp-for="Workflow.Id" />
+                <label asp-for="NewState.Name" class="control-label"></label>
+                <input asp-for="NewState.Name" class="form-control" />
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Add State" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <form class="col-12 border p-3 border-dark my-3" method="post" asp-page-handler="AddTransition">
+        <h4>Add New Transition</h4>
+        <div class="col-md-8">
+            <input type="hidden" asp-for="Workflow.Id" />
+            <!--Source Transition-->
+            <label asp-for="NewTransition.SourceState" class="control-label"></label>
+            <select asp-for="NewTransition.SourceStateId" class="form-control">
+                @if (@Model.Workflow.States is not null)
+                {
+                    @if (@Model.Workflow.States.Count == 0)
+                    {
+                        <option disabled readonly>No States Added yet</option>
+                    }
+                    else
+                    {
+                        @foreach (var item in @Model.Workflow.States)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+
+                        }
+                    }
+                }
+            </select>
+
+            <!-- Destination State -->
+
+            <label asp-for="NewTransition.DestinationState" class="control-label"></label>
+            <select asp-for="NewTransition.DestinationStateId" class="form-control">
+                @if (@Model.Workflow.States is not null)
+                {
+                    @if (@Model.Workflow.States.Count == 0)
+                    {
+                        <option disabled readonly>No States Added yet</option>
+                    }
+                    else
+                    {
+                        @foreach (var state in @Model.Workflow.States)
+                        {
+                            @if (@Model.Workflow.IntialStateId != state.Id)
+                            {
+                                <option value="@state.Id">@state.Name</option>
+                            }
+                        }
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <!-- Transition Name -->
+            <div class="form-group">
+                <label asp-for="NewTransition.Name" class="control-label"></label>
+                <input asp-for="NewTransition.Name" class="form-control" />
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Add Transition" class="btn btn-success" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <h3>Transitions In Workflow</h3>
+    <table class="col-12 table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Source State</th>
+                <th>Transition</th>
+                <th>Destination State</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (@Model.Transitions is not null)
+            {
+                @foreach (var tran in @Model.Transitions)
+                {
+                    <tr>
+                        <td>@tran.SourceState.Name</td>
+                        <td>@tran.Name</td>
+                        <td>@tran.DestinationState.Name</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

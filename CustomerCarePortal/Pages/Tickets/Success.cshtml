@@ -1,0 +1,11 @@
+﻿@page
+@model CustomerCarePortal.Pages.Tickets.SuccessModel
+@{
+}
+<div class="h1 text-info"> Thanks for using the Portal</div>
+<div class="h1 text-success">
+    Your ticket has been generated with ticket id: @Model.Ticket.TrackingId, We will try to resovle the issue as soon as possible
+</div>
+<div class="h2 text-info">
+    You can check status of your ticket later at <a class="link-info" asp-page="/Tickets/Tracking">Tracking Page</a>
+</div>

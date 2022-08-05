@@ -1,0 +1,42 @@
+﻿@page
+@model CustomerCarePortal.Areas.Identity.Pages.Roles.DetailsModel
+@{
+}
+<h1> Selected Role is: @Model.SelectedRole.Name</h1>
+
+<form method="post">
+    <table class="table table-striped">
+        <tr>
+            <td class="text-capitalize text-black text-black-50">
+                users in the system
+            </td>
+            <td class="text-capitalize text-black text-black-50">
+                users in this role
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @foreach (var user in Model.AllUsersInSystem)
+                {
+
+                    <div>
+                        @user.UserName
+                        <button class="hover-success" type="submit" asp-route-TaskType="AddUser" asp-route-uid=@user.Id asp-route-rid=@Model.SelectedRole.Id ><i class=" bi bi-plus-lg"></i></button>
+                        <hr />
+                    </div>
+                }
+            </td>
+            <td>
+                @foreach (var user in Model.AllUsersInThisRole)
+                {
+                    <div>
+                        @user.UserName
+                        <button class="hover-danger" type="submit" asp-route-TaskType="RemoveUser" asp-route-uid=@user.Id asp-route-rid=@Model.SelectedRole.Id  ><i class="bi bi-dash-lg"></i></button>
+                        <hr />
+                    </div>
+                }
+
+            </td>
+        </tr>
+    </table>
+</form>

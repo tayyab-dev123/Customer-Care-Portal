@@ -1,0 +1,40 @@
+﻿@page
+@model CustomerCarePortal.Pages.Agents.IndexModel
+@{
+}
+<div class="mb-3">
+    <a class="btn btn-success" asp-page="./Create" >Add New Agent</a>
+</div>
+<!-- List of agents in the system -->
+    <div class="row">
+        <div class="col-12 h2 text-secondary">Currently Agents in the System</div>
+        <table class="col-12 table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Agent Name
+                    </th>
+                    <th>
+                        Team Name
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var agent in @Model.AllAgentsInSystem)
+                {
+                    <tr>
+                        <td>
+                            @agent.Name
+                        </td>
+                        <td>
+                            @agent.Team.Name
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@agent.Id">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
